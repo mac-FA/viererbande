@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Viererbande</title>
+<meta name="description" content="Finde vier Gruppen aus je vier Begriffen – das deutsche Verbindungs-Rätsel.">
+<meta name="theme-color" content="#121213">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="stylesheet" href="css/style.css">
+<script>
+  // Dunkelmodus vor dem ersten Zeichnen setzen, damit nichts aufblitzt
+  try {
+    const d = JSON.parse(localStorage.getItem('viererbande-v1') || '{}').dunkel;
+    if (d === true || (d == null && matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dunkel');
+  } catch (e) {}
+</script>
+</head>
+<body>
+<header class="kopf">
+  <div class="kopf-seite">
+    <button class="icon-btn" id="btn-hilfe" aria-label="Spielanleitung" title="Spielanleitung">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9.3 9.2a2.8 2.8 0 1 1 3.9 2.6c-.8.4-1.2.9-1.2 1.8v.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17.3" r="1.2" fill="currentColor"/></svg>
+    </button>
+    <button class="icon-btn" id="btn-archiv" aria-label="Archiv" title="Archiv – alle Rätsel">
+      <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 10h18M8 3v4M16 3v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="7" y="13" width="3" height="3" rx=".6" fill="currentColor"/><rect x="14" y="13" width="3" height="3" rx=".6" fill="currentColor"/></svg>
+    </button>
+  </div>
+  <div class="titel">
+    <h1>Viererbande</h1>
+    <div class="untertitel" id="untertitel"></div>
+  </div>
+  <div class="kopf-seite rechts">
+    <button class="icon-btn" id="btn-statistik" aria-label="Statistik" title="Statistik">
+      <svg viewBox="0 0 24 24"><rect x="3" y="12" width="4" height="9" rx="1" fill="currentColor"/><rect x="10" y="7" width="4" height="14" rx="1" fill="currentColor"/><rect x="17" y="3" width="4" height="18" rx="1" fill="currentColor"/></svg>
+    </button>
+    <button class="icon-btn" id="btn-dunkel" aria-label="Hell/Dunkel umschalten" title="Hell/Dunkel umschalten">
+      <svg viewBox="0 0 24 24"><path d="M20.5 14.6A8.5 8.5 0 0 1 9.4 3.5a8.5 8.5 0 1 0 11.1 11.1z" fill="currentColor"/></svg>
+    </button>
+  </div>
+</header>
+
+<main>
+  <p class="aufgabe">Bilde vier Gruppen aus je vier Begriffen!</p>
+  <div class="brett" id="brett" aria-label="Spielfeld"></div>
+  <div class="fehler-zeile" id="fehler-zeile">Fehler übrig: <span class="punkte" id="punkte" aria-live="polite"></span></div>
+  <div class="knoepfe" id="knoepfe-spiel">
+    <button class="knopf" id="btn-mischen">Mischen</button>
+    <button class="knopf" id="btn-abwaehlen">Auswahl aufheben</button>
+    <button class="knopf voll" id="btn-abschicken">Abschicken</button>
+  </div>
+  <div class="knoepfe" id="knoepfe-ende" hidden>
+    <button class="knopf voll" id="btn-ergebnis">Ergebnis ansehen</button>
+    <button class="knopf" id="btn-archiv2">Weitere Rätsel</button>
+  </div>
+</main>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<!-- Hilfe -->
+<div class="dialog" id="dlg-hilfe" hidden>
+  <div class="karte" role="dialog" aria-modal="true" aria-labelledby="hilfe-titel">
+    <button class="schliessen" data-schliessen aria-label="Schließen">&times;</button>
+    <h2 id="hilfe-titel">So wird gespielt</h2>
+    <p>Finde Gruppen aus <strong>vier Begriffen</strong>, die etwas gemeinsam haben.</p>
+    <ul>
+      <li>Tippe vier Begriffe an und drücke <strong>Abschicken</strong>.</li>
+      <li>Jedes Rätsel hat genau eine Lösung. Vorsicht vor Begriffen, die in mehrere Gruppen zu passen scheinen!</li>
+      <li>Du darfst dich <strong>viermal irren</strong>. Liegen drei von vier richtig, sagen wir dir Bescheid.</li>
+    </ul>
+    <h3>Beispiele</h3>
+    <div class="beispiel"><b>Planeten:</b> Mars, Venus, Saturn, Jupiter</div>
+    <div class="beispiel"><b>___zeug:</b> Spiel, Flug, Werk, Fahr</div>
+    <p>Die Kategorien sind immer spezieller als „Wörter mit fünf Buchstaben“ oder „Namen“.</p>
+    <h3>Schwierigkeit</h3>
+    <div class="stufen">
+      <span class="stufe gelb">einfach</span>
+      <span class="stufe gruen"></span>
+      <span class="stufe blau"></span>
+      <span class="stufe lila">knifflig</span>
+    </div>
+    <p class="klein">Lila steckt oft voller Wortspiele – etwa versteckte Wörter oder Begriffe, die mit demselben Wort ein neues bilden.</p>
+    <hr>
+    <p class="klein">Jeden Tag gibt es ein neues Tagesrätsel. Über das <strong>Archiv</strong> kannst du jederzeit alle Rätsel spielen.</p>
+  </div>
+</div>
+
+<!-- Ergebnis -->
+<div class="dialog" id="dlg-ergebnis" hidden>
+  <div class="karte mitte" role="dialog" aria-modal="true" aria-labelledby="erg-titel">
+    <button class="schliessen" data-schliessen aria-label="Schließen">&times;</button>
+    <h2 id="erg-titel"></h2>
+    <p id="erg-text"></p>
+    <div class="raster" id="erg-raster"></div>
+    <div class="naechstes" id="erg-naechstes"></div>
+    <div class="dialog-knoepfe">
+      <button class="knopf voll" id="btn-teilen">Ergebnis teilen</button>
+      <button class="knopf" id="btn-erg-archiv">Weitere Rätsel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Statistik -->
+<div class="dialog" id="dlg-statistik" hidden>
+  <div class="karte mitte" role="dialog" aria-modal="true" aria-labelledby="stat-titel">
+    <button class="schliessen" data-schliessen aria-label="Schließen">&times;</button>
+    <h2 id="stat-titel">Statistik</h2>
+    <div class="zahlen" id="stat-zahlen"></div>
+    <h3>Fehler pro gelöstem Rätsel</h3>
+    <div class="verteilung" id="stat-verteilung"></div>
+    <p class="klein">Die Serie zählt nur Tagesrätsel, die am selben Tag gelöst wurden.</p>
+    <button class="knopf klein-knopf" id="btn-reset">Statistik zurücksetzen</button>
+  </div>
+</div>
+
+<!-- Archiv -->
+<div class="dialog" id="dlg-archiv" hidden>
+  <div class="karte" role="dialog" aria-modal="true" aria-labelledby="archiv-titel">
+    <button class="schliessen" data-schliessen aria-label="Schließen">&times;</button>
+    <h2 id="archiv-titel">Archiv</h2>
+    <p class="klein" id="archiv-info"></p>
+    <div class="archiv" id="archiv-liste"></div>
+  </div>
+</div>
+
+<script src="js/raetsel.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
