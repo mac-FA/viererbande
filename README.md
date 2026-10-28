@@ -7,7 +7,7 @@ Statisches Vanilla-JS, läuft als PWA (offline spielbar über `sw.js`).
 
 - **Tagesrätsel:** Nr. 1 = 28.10.2026, danach jeden Tag das nächste der 60 Rätsel aus `js/raetsel.js` (läuft nach dem letzten wieder von vorn).
 - **Archiv:** alle Rätsel jederzeit spielbar, Direktlink `#7` öffnet Rätsel 7.
-- **Statistik, Serie, Teilen** (Emoji-Raster), Hell/Dunkel, „Einer fehlt …“-Hinweis.
+- **Statistik, Serie, Teilen** (Emoji-Raster), Hell/Dunkel, „Fast! Drei von vier passen“-Hinweis.
 
 ## Lokal starten
 

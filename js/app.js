@@ -248,7 +248,7 @@
       if (z.geloest.length === 4) { await ende(true); return; }
     } else {
       const treffer = Math.max(...[0, 1, 2, 3].map(g => tipp.filter(w => gruppeVon[w] === g).length));
-      if (treffer === 3) toast('Einer fehlt …');
+      if (treffer === 3) toast('Fast! Drei von vier passen – eines ist eine Ablenkung und gehört zu einer anderen Gruppe.', 3200);
       tipp.forEach(w => animiere(kacheln.get(w), 'wackel'));
       z.fehler++;
       merke();

@@ -201,6 +201,9 @@ main {
   z-index: 30; pointer-events: none;
 }
 .toast {
+  max-width: min(440px, calc(100vw - 32px));
+  text-align: center;
+  line-height: 1.35;
   background: var(--toast-bg); color: var(--toast-text);
   padding: 10px 16px; border-radius: 6px;
   font-weight: 700; font-size: 15px;
