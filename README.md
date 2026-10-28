@@ -3,6 +3,8 @@
 Deutscher Klon von „Connections“: 16 Begriffe, vier Gruppen à vier, höchstens vier Fehler.
 Statisches Vanilla-JS, läuft als PWA (offline spielbar über `sw.js`).
 
+**Live: https://mac-fa.github.io/viererbande/** – Repo `mac-FA/viererbande`, Pages aus `main` (Root). Jeder Push auf `main` ist ein neues Deployment.
+
 - **Tagesrätsel:** Nr. 1 = 28.10.2026, danach jeden Tag das nächste der 60 Rätsel aus `js/raetsel.js` (läuft nach dem letzten wieder von vorn).
 - **Archiv:** alle Rätsel jederzeit spielbar, Direktlink `#7` öffnet Rätsel 7.
 - **Statistik, Serie, Teilen** (Emoji-Raster), Hell/Dunkel, „Einer fehlt …“-Hinweis.
